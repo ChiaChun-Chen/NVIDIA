@@ -32,3 +32,18 @@ void setGPIO(unsigned int gpio, string status)
 	close(io);
 	return;
 }
+
+int main(int argc, char *argv){
+    string input1=argv[1], input2=argv[2];
+    int id;
+    if(input1=="LED1"){
+        id=396;
+    }else if(input1=="LED2"){
+        id=255;
+    }else if(input1=="LED3"){
+        id=428;
+    }else if(input1=="LED4"){
+        id=427;
+    }
+    setGPIO(id, input2);
+}
