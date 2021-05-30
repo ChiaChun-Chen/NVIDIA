@@ -11,6 +11,44 @@ static int iCount = 0;
 static ssize_t drv_read(struct file *filp, char *buf, size_t count, loff_t *ppos)
  {
     printk("Enter read function\n");
+    
+	char gpio[3]={0};
+	char userChar[1]={0};
+	copy_from_user(gpio, buf, 3);
+	printk("gpio(char): %s\n", gpio);
+	
+	struct file *io;
+	loff_t pos = 0;
+	mm_segment_t old_fs;
+    	old_fs = get_fs();
+    	set_fs(get_ds());
+
+	if(strcmp(gpio, "396")==0){
+        	io=filp_open("/sys/class/gpio/gpio396/value", O_RDONLY, 0);
+	}else if(strcmp(gpio, "255")==0){
+        	io=filp_open("/sys/class/gpio/gpio255/value", O_RDONLY, 0);
+	}else if(strcmp(gpio, "428")==0){
+        	io=filp_open("/sys/class/gpio/gpio428/value", O_RDONLY, 0);
+	}else if(strcmp(gpio, "427")==0){
+        	io=filp_open("/sys/class/gpio/gpio427/value", O_RDONLY, 0);
+	}
+	vfs_read(io, userChar, 1, &pos);
+    	filp_close(io, NULL);
+    	pos=0;
+	if(strcmp(gpio, "396")==0){
+        	printk("LED1 Status: %s", userChar);
+	}else if(strcmp(gpio, "255")==0){
+        	printk("LED2 Status: %s", userChar);
+	}else if(strcmp(gpio, "428")==0){
+        	printk("LED3 Status: %s", userChar);
+	}else if(strcmp(gpio, "427")==0){
+        	printk("LED4 Status: %s", userChar);
+	}
+    	
+	// send the result
+	copy_to_user(buf, userChar, 1);
+
+	set_fs(old_fs);
     return count;
  }
 
@@ -37,17 +75,43 @@ static ssize_t drv_read(struct file *filp, char *buf, size_t count, loff_t *ppos
 	filp_close(io, NULL);
 	pos=0;
 
-	if(strcmp(gpio, "396")==0)
-		io=filp_open("/sys/class/gpio/gpio396/direction", O_WRONLY, 0);
-	vfs_write(io, "out", 3, &pos);
-	filp_close(io, NULL);
-	pos=0;
-
-	if(strcmp(gpio, "396")==0)
+	if(strcmp(gpio, "396")==0){
+        	io=filp_open("/sys/class/gpio/gpio396/direction", O_WRONLY, 0);
+        	vfs_write(io, "out", 3, &pos);
+		filp_close(io, NULL);
+		pos=0;
 		io=filp_open("/sys/class/gpio/gpio396/value", O_WRONLY, 0);
-	vfs_write(io, &userChar[count-2], 1, &pos);
-	filp_close(io, NULL);
-	pos=0;
+		vfs_write(io, &userChar[count-2], 1, &pos);
+		filp_close(io, NULL);
+		pos=0;
+	}else if(strcmp(gpio, "255")==0){
+		io=filp_open("/sys/class/gpio/gpio255/direction", O_WRONLY, 0);
+		vfs_write(io, "out", 3, &pos);
+		filp_close(io, NULL);
+		pos=0;
+		io=filp_open("/sys/class/gpio/gpio255/value", O_WRONLY, 0);
+		vfs_write(io, &userChar[count-2], 1, &pos);
+		filp_close(io, NULL);
+		pos=0;
+	}else if(strcmp(gpio, "428")==0){
+		io=filp_open("/sys/class/gpio/gpio428/direction", O_WRONLY, 0);
+		vfs_write(io, "out", 3, &pos);
+		filp_close(io, NULL);
+		pos=0;
+		io=filp_open("/sys/class/gpio/gpio428/value", O_WRONLY, 0);
+		vfs_write(io, &userChar[count-2], 1, &pos);
+		filp_close(io, NULL);
+		pos=0;
+	}else if(strcmp(gpio, "427")==0){
+		io=filp_open("/sys/class/gpio/gpio427/direction", O_WRONLY, 0);
+		vfs_write(io, "out", 3, &pos);
+		filp_close(io, NULL);
+		pos=0;
+		io=filp_open("/sys/class/gpio/gpio427/value", O_WRONLY, 0);
+		vfs_write(io, &userChar[count-2], 1, &pos);
+		filp_close(io, NULL);
+		pos=0;
+	}
 
 	set_fs(old_fs);
 	iCount++;
@@ -62,19 +126,19 @@ static ssize_t drv_read(struct file *filp, char *buf, size_t count, loff_t *ppos
 
  static int drv_open(struct inode *inode, struct file *filp)
  {
-    printk("device open\n");
+    printk("Enter Open function\n");
     return 0;
  }
 
  long drv_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
  {
-    printk("device ioctl\n");
+    printk("Enter I/O Control function\n");
     return 0;
  }
 
  static int drv_release(struct inode *inode, struct file *filp)
  {
-    printk("device close\n");
+    printk("Enter Release function\n");
     return 0;
  }
 
