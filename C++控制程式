@@ -33,7 +33,23 @@ void setGPIO(unsigned int gpio, string status)
 	return;
 }
 
-int main(int argc, char *argv){
+void read_status(unsigned int gpio){
+	int io;
+	io=open("/dev/demo", O_WRONLY);
+	if(io<0)
+	{
+		perror("gpio error");
+		return;
+	}
+	char buf[10]={0};
+	strcpy(buf, (to_string(gpio)).c_str());
+	read(io, buf, 1);
+	cout << "status: " << buf << endl;
+	close(io);
+	return;
+}
+
+int main(int argc, char *argv[]){
     string input1=argv[1], input2=argv[2];
     int id;
     if(input1=="LED1"){
@@ -45,5 +61,11 @@ int main(int argc, char *argv){
     }else if(input1=="LED4"){
         id=427;
     }
-    setGPIO(id, input2);
+    
+    if(input2==0 || input2==1){
+    	setGPIO(id, input2);
+    }else{
+    	read_status(id);
+    }
+    
 }
