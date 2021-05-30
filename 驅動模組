@@ -2,6 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/fs.h>
+#include <asm/uaccess.h>
 #define MAJOR_NUM 60
 #define MODULE_NAME "demo"
 static int iCount=0;
@@ -27,18 +28,25 @@ static int demo_init(void)
 	return 0;
 }
 
-static ssize_t drv_read(struct file *filp, char *buf, size_t count, loff_t *ppos)
+static int drv_open(struct inode *inode, struct file *filp)
 {
-	printk("Enter Read function\n");
-	return count;
+	printk("Enter Open function\n");
+	return 0;
 }
+
+long drv_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+	printk("Enter I/O Control function\n");
+	return 0;
+}
+
 
 static ssize_t drv_write(struct file *filp, const char *buf, size_t count, loff_t *ppos)
 {
 	printk("Enter write function\n");
 	printk("iCount=%d\n", iCount);
 	printk("W_buf_size: %d\n", (int)count);
-	
+	char userChar[10]={0};
 	copy_from_user(userChar, buf, count);
 	userChar[count-1]='\0';
 	printk("userChar(char): %s\n", userChar);
@@ -73,16 +81,13 @@ static ssize_t drv_write(struct file *filp, const char *buf, size_t count, loff_
 	return count;
 }
 
-long drv_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+static ssize_t drv_read(struct file *filp, char *buf, size_t count, loff_t *ppos)
 {
-	printk("Enter I/O Control function\n");
-	return 0;
-}
+	printk("Enter Read function\n");
 
-static int drv_open(struct inode *inode, struct file *filp)
-{
-	printk("Enter Open function\n");
-	return 0;
+
+
+	return count;
 }
 
 static int drv_release(struct inode *inode, struct file *filp)
