@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
         id=427;
     }
     
-    if(input2==0 || input2==1){
+    if(input2=="on" || input2=="off"){
     	setGPIO(id, input2);
     }else{
     	read_status(id);
