@@ -142,6 +142,7 @@ int main(int argc, char *argv[]){
     pthread_t t1, t2;   //建立子程序
     string input1=argv[1], input2=argv[2];
     int time=2*stoi(input2);
+    printf("time=%d\n", time);
     pthread_create(&t1, NULL, setGPIO, (void*)&input1);
     pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
     ///
@@ -166,7 +167,7 @@ int main(int argc, char *argv[]){
             sem_post(&semaphore2);printf("427.time=%d\n", time);
             sem_post(&semaphore2);
         }
-        sleep(300);
+        sleep(30);
     }
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
