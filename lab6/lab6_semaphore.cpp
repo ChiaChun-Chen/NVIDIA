@@ -93,10 +93,10 @@ void *setGPIO(string input){
     }
     ///
     ///決定好gpio_all之後，開啟led燈
-	if(input[i]=="1"){
+	if(input[i]=='1'){
         gpio_set_value(gpio_all, 1);
         printf("gpio%d=1", gpio_all);
-	}else if(input[i]=="0"){
+	}else if(input[i]=='0'){
         gpio_set_value(gpio_all, 0);
         printf("gpio%d=0", gpio_all);
     }
@@ -119,10 +119,10 @@ void *setGPIO_u(string input){
     }
     ///
     ///決定好gpio_all之後，開啟led燈
-	if(input[i]=="0"){
+	if(input[i]=='0'){
         gpio_set_value(gpio_all, 1);
         printf("gpio%d=1", gpio_all);
-	}else if(input[i]=="1"){
+	}else if(input[i]=='1'){
         gpio_set_value(gpio_all, 0);
         printf("gpio%d=0", gpio_all);
     }
@@ -136,8 +136,8 @@ int main(int argc, char *argv[]){
     sem_init(&semaphore, 0, 0);                  //初始化號誌
     sem_init(&semaphore2, 0, 0);
     pthread_t t1, t2;   //建立子程序
-    pthread_create(&t1, NULL, setGPIO(input1), NULL);
-    pthread_create(&t2, NULL, setGPIO_u(input1), NULL);
+    pthread_create(&t1, NULL, setGPIO, input1);
+    pthread_create(&t2, NULL, setGPIO_u, input1);
     ///
     ///first, export all gpio
     gpio_export(396);
