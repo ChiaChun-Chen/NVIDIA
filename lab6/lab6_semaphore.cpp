@@ -95,6 +95,7 @@ void *setGPIO(void *argv){
     }
     ///
     ///決定好gpio_all之後，開啟led燈
+    printf("input[%d]=%d\n", i, input[i]);
 	if(input[i]=='1'){
         gpio_set_value(gpio_all, 1);
         printf("gpio%d=1, count=%d\n", gpio_all, count-1);
@@ -123,10 +124,11 @@ void *setGPIO_u(void *argv){
     }
     ///
     ///決定好gpio_all之後，開啟led燈
-	if(input[i]=='0'){
+    printf("input[%d]=%d\n", i, input[i]);
+	if(input[i]==0){
         gpio_set_value(gpio_all, 1);
         printf("gpio%d=1, count=%d\n", gpio_all, count-1);
-	}else if(input[i]=='1'){
+	}else if(input[i]==1){
         gpio_set_value(gpio_all, 0);
         printf("gpio%d=0, count=%d\n", gpio_all, count-1);
     }
@@ -167,7 +169,7 @@ int main(int argc, char *argv[]){
             sem_post(&semaphore2);printf("427.time=%d\n", time);
             sem_post(&semaphore2);
         }
-        sleep(30);
+        sleep(1);
     }
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
