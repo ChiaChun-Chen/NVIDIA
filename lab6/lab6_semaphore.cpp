@@ -78,8 +78,8 @@ int gpio_set_value(unsigned int gpio, int value){
 }
 
 void *setGPIO(void *argv){
-    string input=*(string*)argv;    //進行類型轉換
     sem_wait(&semaphore);             //等待工作
+    string input=*(string*)argv;    //進行類型轉換
     int i=count;
     count++;
     ///
@@ -106,8 +106,8 @@ void *setGPIO(void *argv){
 }
 
 void *setGPIO_u(void *argv){
-    string input=*(string*)argv;    //進行類型轉換
     sem_wait(&semaphore);             //等待工作
+    string input=*(string*)argv;    //進行類型轉換
     int i=count;
     count++;
     ///
@@ -160,10 +160,10 @@ int main(int argc, char *argv[]){
             sem_post(&semaphore);printf("into gpio428\n");
             sem_post(&semaphore);printf("into gpio427\n");
             sem_post(&semaphore);
-        }else{
-            sem_post(&semaphore2);
-            sem_post(&semaphore2);
-            sem_post(&semaphore2);
+        }else{printf("396.time=%d\n", time);
+            sem_post(&semaphore2);printf("255.time=%d\n", time);
+            sem_post(&semaphore2);printf("428.time=%d\n", time);
+            sem_post(&semaphore2);printf("427.time=%d\n", time);
             sem_post(&semaphore2);
         }
         sleep(300);
