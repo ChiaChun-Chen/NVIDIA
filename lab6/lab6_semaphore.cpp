@@ -106,7 +106,7 @@ void *setGPIO(void *argv){
 }
 
 void *setGPIO_u(void *argv){
-    sem_wait(&semaphore);             //等待工作
+    sem_wait(&semaphore2);             //等待工作
     string input=*(string*)argv;    //進行類型轉換
     int i=count;
     count++;
