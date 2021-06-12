@@ -97,10 +97,10 @@ void *setGPIO(void *argv){
     ///決定好gpio_all之後，開啟led燈
 	if(input[i]=='1'){
         gpio_set_value(gpio_all, 1);
-        printf("gpio%d=1, count=%d\n", gpio_all, count);
+        printf("gpio%d=1, count=%d\n", gpio_all, count-1);
 	}else if(input[i]=='0'){
         gpio_set_value(gpio_all, 0);
-        printf("gpio%d=0, count=%d\n", gpio_all, count);
+        printf("gpio%d=0, count=%d\n", gpio_all, count-1);
     }
     pthread_exit(NULL);
 }
@@ -125,10 +125,10 @@ void *setGPIO_u(void *argv){
     ///決定好gpio_all之後，開啟led燈
 	if(input[i]=='0'){
         gpio_set_value(gpio_all, 1);
-        printf("gpio%d=1, count=%d\n", gpio_all, count);
+        printf("gpio%d=1, count=%d\n", gpio_all, count-1);
 	}else if(input[i]=='1'){
         gpio_set_value(gpio_all, 0);
-        printf("gpio%d=0, count=%d\n", gpio_all, count);
+        printf("gpio%d=0, count=%d\n", gpio_all, count-1);
     }
     ///
     ///unlock
