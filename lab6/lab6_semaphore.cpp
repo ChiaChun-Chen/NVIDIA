@@ -77,8 +77,9 @@ int gpio_set_value(unsigned int gpio, int value){
     return 0;
 }
 
-void *setGPIO(string input){
-    sem_wait(&semaphore);       //等待工作
+void *setGPIO(void *argv){
+    string input=*(string*)argv;    //進行類型轉換
+    sem_wait(&semaphore);             //等待工作
     int i=count++;
     ///
     ///全域變數gpio_all
@@ -103,8 +104,9 @@ void *setGPIO(string input){
     pthread_exit(NULL);
 }
 
-void *setGPIO_u(string input){
-    sem_wait(&semaphore);
+void *setGPIO_u(void *argv){
+    string input=*(string*)argv;    //進行類型轉換
+    sem_wait(&semaphore);             //等待工作
     int i=count++;
     ///
     ///全域變數gpio_all
@@ -136,8 +138,10 @@ int main(int argc, char *argv[]){
     sem_init(&semaphore, 0, 0);                  //初始化號誌
     sem_init(&semaphore2, 0, 0);
     pthread_t t1, t2;   //建立子程序
-    pthread_create(&t1, NULL, setGPIO, input1);
-    pthread_create(&t2, NULL, setGPIO_u, input1);
+    string input1=argv[1], input2=argv[2];
+    int time=2*stoi(input2);
+    pthread_create(&t1, NULL, setGPIO, (void*)&input1);
+    pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
     ///
     ///first, export all gpio
     gpio_export(396);
@@ -147,8 +151,7 @@ int main(int argc, char *argv[]){
 
     ///
     ///start to shine
-    string input1=argv[1], input2=argv[2];
-    int time=2*stoi(input2);
+
     for(time; time>=0; time--){
         if(time%2==0){
             sem_post(&semaphore);
