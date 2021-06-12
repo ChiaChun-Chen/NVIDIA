@@ -155,10 +155,10 @@ int main(int argc, char *argv[]){
     ///start to shine
 
     for(time; time>=0; time--){
-        if(time%2==0){
-            sem_post(&semaphore);
-            sem_post(&semaphore);
-            sem_post(&semaphore);
+        if(time%2==0){printf("into gpio396\n");
+            sem_post(&semaphore);printf("into gpio255\n");
+            sem_post(&semaphore);printf("into gpio428\n");
+            sem_post(&semaphore);printf("into gpio427\n");
             sem_post(&semaphore);
         }else{
             sem_post(&semaphore2);
