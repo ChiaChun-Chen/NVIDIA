@@ -80,7 +80,8 @@ int gpio_set_value(unsigned int gpio, int value){
 void *setGPIO(void *argv){
     string input=*(string*)argv;    //進行類型轉換
     sem_wait(&semaphore);             //等待工作
-    int i=count++;
+    int i=count;
+    count++;
     ///
     ///全域變數gpio_all
     if(i%4==0){
@@ -96,10 +97,10 @@ void *setGPIO(void *argv){
     ///決定好gpio_all之後，開啟led燈
 	if(input[i]=='1'){
         gpio_set_value(gpio_all, 1);
-        printf("gpio%d=1", gpio_all);
+        printf("gpio%d=1, count=%d\n", gpio_all, count);
 	}else if(input[i]=='0'){
         gpio_set_value(gpio_all, 0);
-        printf("gpio%d=0", gpio_all);
+        printf("gpio%d=0, count=%d\n", gpio_all, count);
     }
     pthread_exit(NULL);
 }
@@ -107,7 +108,8 @@ void *setGPIO(void *argv){
 void *setGPIO_u(void *argv){
     string input=*(string*)argv;    //進行類型轉換
     sem_wait(&semaphore);             //等待工作
-    int i=count++;
+    int i=count;
+    count++;
     ///
     ///全域變數gpio_all
     if(i%4==0){
@@ -123,10 +125,10 @@ void *setGPIO_u(void *argv){
     ///決定好gpio_all之後，開啟led燈
 	if(input[i]=='0'){
         gpio_set_value(gpio_all, 1);
-        printf("gpio%d=1", gpio_all);
+        printf("gpio%d=1, count=%d\n", gpio_all, count);
 	}else if(input[i]=='1'){
         gpio_set_value(gpio_all, 0);
-        printf("gpio%d=0", gpio_all);
+        printf("gpio%d=0, count=%d\n", gpio_all, count);
     }
     ///
     ///unlock
@@ -140,8 +142,8 @@ int main(int argc, char *argv[]){
     pthread_t t1, t2;   //建立子程序
     string input1=argv[1], input2=argv[2];
     int time=2*stoi(input2);
-    pthread_create(&t1, NULL, setGPIO, (void*)input1);
-    pthread_create(&t2, NULL, setGPIO_u, (void*)input1);
+    pthread_create(&t1, NULL, setGPIO, (void*)&input1);
+    pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
     ///
     ///first, export all gpio
     gpio_export(396);
