@@ -147,15 +147,15 @@ int main(int argc, char *argv[]){
     int time=2*stoi(input2);
     for(time; time>=0; time--){
         if(time%2==0){
-            pthread_create(&thread1, NULL, setGPIO(input1, 0), 0);
-            pthread_create(&thread2, NULL, setGPIO(input1, 1), 0);
-            pthread_create(&thread3, NULL, setGPIO(input1, 2), 0);
-            pthread_create(&thread4, NULL, setGPIO(input1, 3), 0);
+            pthread_create(&thread1, NULL, setGPIO, input1, 0);
+            pthread_create(&thread2, NULL, setGPIO, input1, 1);
+            pthread_create(&thread3, NULL, setGPIO, input1, 2);
+            pthread_create(&thread4, NULL, setGPIO, input1, 3);
         }else{
-            pthread_create(&thread1, NULL, setGPIO_u(input1, 0), 0);
-            pthread_create(&thread2, NULL, setGPIO_u(input1, 1), 0);
-            pthread_create(&thread3, NULL, setGPIO_u(input1, 2), 0);
-            pthread_create(&thread4, NULL, setGPIO_u(input1, 3), 0);
+            pthread_create(&thread1, NULL, setGPIO_u, input1, 0);
+            pthread_create(&thread2, NULL, setGPIO_u, input1, 1);
+            pthread_create(&thread3, NULL, setGPIO_u, input1, 2);
+            pthread_create(&thread4, NULL, setGPIO_u, input1, 3);
         }
         sleep(300);
     }
