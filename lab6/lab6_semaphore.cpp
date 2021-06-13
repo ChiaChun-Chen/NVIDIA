@@ -173,7 +173,7 @@ int main(int argc, char *argv[]){
             sem_post(&semaphore2);printf("427.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
             sem_post(&semaphore2);
         }
-        sleep(1);
+        sleep(10);
     }
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
