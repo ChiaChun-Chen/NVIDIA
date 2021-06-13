@@ -181,6 +181,12 @@ int main(int argc, char *argv[]){
     }
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
+    ///
+    ///close LED
+    gpio_set_value(396, 0);
+    gpio_set_value(255, 0);
+    gpio_set_value(428, 0);
+    gpio_set_value(427, 0);
 
     ///
     ///last, export all gpio
