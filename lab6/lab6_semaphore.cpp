@@ -153,6 +153,10 @@ int main(int argc, char *argv[]){
     gpio_export(255);
     gpio_export(428);
     gpio_export(427);
+    gpio_set_dir(396, "out");
+    gpio_set_dir(255, "out");
+    gpio_set_dir(428, "out");
+    gpio_set_dir(427, "out");
 
     ///
     ///start to shine
