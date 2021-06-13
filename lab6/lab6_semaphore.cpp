@@ -159,14 +159,14 @@ int main(int argc, char *argv[]){
 
     for(time; time>=0; time--){
         if(time%2==0){printf("into gpio396\n");
-            sem_post(&semaphore);printf("into gpio255\n");
-            sem_post(&semaphore);printf("into gpio428\n");
-            sem_post(&semaphore);printf("into gpio427\n");
+            sem_post(&semaphore);printf("into gpio255\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
+            sem_post(&semaphore);printf("into gpio428\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
+            sem_post(&semaphore);printf("into gpio427\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
             sem_post(&semaphore);
         }else{printf("396.time=%d\n", time);
-            sem_post(&semaphore2);printf("255.time=%d\n", time);
-            sem_post(&semaphore2);printf("428.time=%d\n", time);
-            sem_post(&semaphore2);printf("427.time=%d\n", time);
+            sem_post(&semaphore2);printf("255.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
+            sem_post(&semaphore2);printf("428.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
+            sem_post(&semaphore2);printf("427.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
             sem_post(&semaphore2);
         }
         sleep(1);
