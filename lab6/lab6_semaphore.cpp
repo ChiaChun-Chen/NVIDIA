@@ -145,8 +145,8 @@ int main(int argc, char *argv[]){
     string input1=argv[1], input2=argv[2];
     int time=2*stoi(input2);
     printf("time=%d\n", time);
-    pthread_create(&t1, NULL, setGPIO, (void*)&input1);
-    pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
+
+
     ///
     ///first, export all gpio
     gpio_export(396);
@@ -158,12 +158,12 @@ int main(int argc, char *argv[]){
     ///start to shine
 
     for(time; time>=0; time--){
-        if(time%2==0){printf("into gpio396\n");
+        if(time%2==0){printf("into gpio396\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
             sem_post(&semaphore);printf("into gpio255\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
             sem_post(&semaphore);printf("into gpio428\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
             sem_post(&semaphore);printf("into gpio427\n");pthread_create(&t1, NULL, setGPIO, (void*)&input1);
             sem_post(&semaphore);
-        }else{printf("396.time=%d\n", time);
+        }else{printf("396.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
             sem_post(&semaphore2);printf("255.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
             sem_post(&semaphore2);printf("428.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
             sem_post(&semaphore2);printf("427.time=%d\n", time);pthread_create(&t2, NULL, setGPIO_u, (void*)&input1);
