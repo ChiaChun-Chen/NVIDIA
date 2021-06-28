@@ -1,0 +1,313 @@
+{\rtf1\ansi\ansicpg950\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset136 \'b7\'73\'b2\'d3\'a9\'fa\'c5\'e9;}}
+{\colortbl ;\red0\green176\blue80;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl240\slmult1\cf1\f0\fs22\lang1028 //\'a6\'40\'a5\'ce\'aa\'ba\'b5\'7b\'a6\'a1\'bd\'58\cf0\par
+#include <iostream>\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+#include <errno.h>\par
+#include <unistd.h>\par
+#include <fcntl.h>\par
+using namespace std;\par
+int gpio_export(unsigned int gpio)\{\tab\cf1 //\'b1\'d2\'a5\'cegpio\cf0\par
+        int fd , len;\par
+        char buf[64];\par
+        fd = open("/sys/class/gpio/export", O_WRONLY);\par
+        if(fd < 0)\{\par
+                perror("gpio/export");\par
+                return fd ;\par
+        \}\par
+        len = snprintf(buf, sizeof(buf),"%d",gpio);\par
+        write(fd, buf, len);\par
+        close(fd);\par
+        return 0;\par
+\}\par
+int gpio_unexport(unsigned int gpio)\{\tab\cf1 //\'c3\'f6\'b3\'acgpio\cf0\par
+        int fd , len;\par
+        char buf[64];\par
+        fd = open("/sys/class/gpio/unexport", O_WRONLY);\par
+        if(fd < 0)\{\par
+                perror("gpio/export");\par
+                return fd ;\par
+        \}\par
+        len = snprintf(buf, sizeof(buf),"%d",gpio);\par
+        write(fd, buf, len);\par
+        close(fd);\par
+        return 0;\par
+\}\par
+int gpio_set_dir(unsigned int gpio, string dirStatus)\{\tab\cf1 //\'b3\'5d\'a9\'77direction(\'bf\'e9\'a4\'4a\'a9\'ce\'bf\'e9\'a5\'58)\cf0\par
+        int fd ;\par
+        char buf[64];\par
+        snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction",gpio);\par
+        fd = open(buf, O_WRONLY);\par
+        if(fd < 0)\{\par
+                perror("gpio/direction");\par
+                return fd ;\par
+        \}\par
+        if(dirStatus == "out")\{\par
+                write(fd, "out", 4);\par
+        \}else\{\par
+                write(fd, "in", 3);\par
+        \}\par
+        close(fd);\par
+        return 0;\par
+\}\par
+int gpio_set_value(unsigned int gpio, int value)\{\tab\cf1 //\'b3\'5d\'a9\'77value(1\'a9\'ce0)\cf0\par
+        int fd ;\par
+        char buf[64];\par
+        snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value",gpio);\par
+        fd = open(buf, O_WRONLY);\par
+        if(fd < 0)\{\par
+                perror("gpio/set-value");\par
+                return fd ;\par
+        \}\par
+        if(value == 0)\{\par
+                write(fd, "0", 2);\par
+        \}else\{\par
+                write(fd, "1", 2);\par
+        \}\par
+        close(fd);\par
+        return 0;\par
+\}\par
+\cf1 //shinning\cf0\par
+void MainWindow::on_LEDshining_clicked()\par
+\{\par
+gpio_export(396);\par
+gpio_export(255);\par
+gpio_export(428);\par
+gpio_export(389);\par
+    if(ui->Box1->isChecked())\{\par
+        ui->led1->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(396, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(396, 1);\par
+    \}else\{\par
+        ui->led1->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(396, 0);\par
+ gpio_unexport(396,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box2->isChecked())\{\par
+        ui->led2->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(255, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(255, 1);\par
+\par
+    \}else\{\par
+        ui->led2->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(255, 0);\par
+ gpio_unexport(255,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box3->isChecked())\{\par
+        ui->led3->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(428, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(428, 1);\par
+\par
+    \}else\{\par
+        ui->led3->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(428, 0);\par
+ gpio_unexport(428,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box4->isChecked())\{\par
+        ui->led4->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(389, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(389, 1);\par
+\par
+    \}else\{\par
+        ui->led4->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(389, 0);\par
+ gpio_unexport(389,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+\par
+\}\par
+
+\pard\sa200\sl276\slmult1\cf1 //switching\par
+\cf0 void MainWindow::lite(bool t)\{\par
+    if(t==true)\{\par
+        qint16 percent=ui->spinBox->value();\par
+\par
+        qint16 time=10000/percent;\par
+\par
+        qint16 i = 0;\par
+    for(i=0; i>=0; i++)\{\par
+
+\pard\li720\sa200\sl240\slmult1 gpio_export(396);\par
+gpio_export(255);\par
+gpio_export(428);\par
+gpio_export(389);\par
+
+\pard\sa200\sl276\slmult1         time=10000/percent;\par
+        if(i%2==0)\{\par
+
+\pard\sa200\sl240\slmult1             \par
+    if(ui->Box1->isChecked())\{\par
+        ui->led1->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(396, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(396, 1);\par
+    \}else\{\par
+        ui->led1->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(396, 0);\par
+ gpio_unexport(396,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box2->isChecked())\{\par
+        ui->led2->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(255, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(255, 1);\par
+\par
+    \}else\{\par
+        ui->led2->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(255, 0);\par
+ gpio_unexport(255,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box3->isChecked())\{\par
+        ui->led3->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(428, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(428, 1);\par
+\par
+    \}else\{\par
+        ui->led3->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(428, 0);\par
+ gpio_unexport(428,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box4->isChecked())\{\par
+        ui->led4->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(389, "out");\par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(389, 1);\par
+\par
+    \}else\{\par
+        ui->led4->hide();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_value(389, 0);\par
+ gpio_unexport(389,0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+
+\pard\sa200\sl276\slmult1\par
+        \}else\{\par
+
+\pard\sa200\sl240\slmult1             \par
+    if(ui->Box1->isChecked())\{\par
+        ui->led1->hide();\par
+       gpio_set_value(396, 0);\par
+    \}else\{\par
+        ui->led1->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(396, "out");\par
+ gpio_set_value(396, 1);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box2->isChecked())\{\par
+        ui->led2->hide();\par
+
+\pard\fi360\sl240\slmult1  \par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(255, 0);\par
+\par
+    \}else\{\par
+        ui->led2->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(255, "out");\par
+ gpio_set_value(255, 1);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box3->isChecked())\{\par
+        ui->led3->hide();\par
+
+\pard\fi360\sl240\slmult1  \par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(428, 0);\par
+\par
+    \}else\{\par
+        ui->led3->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(428, "out");\par
+ gpio_set_value(428, 1);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+    if(ui ->Box4->isChecked())\{\par
+        ui->led4->hide();\par
+
+\pard\fi360\sl240\slmult1  \par
+
+\pard\sa200\sl240\slmult1        gpio_set_value(389, 0);\par
+\par
+    \}else\{\par
+        ui->led4->show();\par
+
+\pard\fi360\sl240\slmult1  gpio_set_dir(389, "out");\par
+ gpio_set_value(389, 0);\par
+
+\pard\sa200\sl240\slmult1\par
+    \}\par
+gpio_unexport(396,0);gpio_unexport(255,0);gpio_unexport(428,0);gpio_unexport(389,0);\par
+
+\pard\sa200\sl276\slmult1\par
+        \}\par
+        //QTimer::sleep(0.5);\par
+        QTimer::singleShot(time, &qeventloop, SLOT(quit()));\par
+        qeventloop.exec();\par
+    \}\par
+    \}else\{\par
+        ui->led1->hide();\par
+        ui->led2->hide();\par
+        ui->led3->hide();\par
+        ui->led4->hide();\par
+gpio_unexport(396,0);gpio_unexport(255,0);gpio_unexport(428,0);gpio_unexport(389,0);\par
+    \}\par
+\}\par
+\par
+void MainWindow::on_Switching_on_clicked()\par
+\{\par
+\par
+    t=true;\par
+    lite(t);\par
+\par
+\}\par
+\par
+void MainWindow::on_Switching_off_clicked()\par
+\{\par
+    t=false;\par
+    //ui->Switching_on->disconnect();\par
+    lite(t);\par
+\}\par
+}
+ 
